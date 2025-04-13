@@ -1,11 +1,9 @@
-
-//Importing from app and tourcard.jsx
 import React, { useEffect, useState } from 'react';
 import TourCard from './TourCard';
 
-//retriving the API from the url 
-// * NOTE to self if the  url breaks come back to this,(currently: used an  proxy to avoid issues with permissions)
-const url = 'https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project';
+// * NOTE: using a proxy to avoid CORS issues
+const url = "https://thingproxy.freeboard.io/fetch/https://course-api.com/react-tours-project";
+
 
 const Gallery = ({ tours, setTours, onRemove }) => { // fetched  and displayed all tours
   // Message will show "Loading..." while the data is being fetched
