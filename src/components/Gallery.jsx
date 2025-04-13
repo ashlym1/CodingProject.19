@@ -1,53 +1,70 @@
-import React, { useEffect, useState } from "react";
-import TourCard from "./TourCard";
 
+//Importing from app and tourcard.jsx
+import React, { useEffect, useState } from 'react';
+import TourCard from './TourCard';
 
-// Gallery fetched and renders all the tours 
-const Gallery = ({ tours, setTours, onRemove }) => {
+//retriving the API from the url * NOTE to self 
+// ; url breaks come back to this, used an  proxy to avoid issues with permissions)
+const url = 'https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project';
+
+const Gallery = ({ tours, setTours, onRemove }) => { // fetched  and displayed all tours
+  // Message will show "Loading..." while the data is being fetched
   const [loading, setLoading] = useState(true);
+
+  // State variable, will show an error message if something goes wrong/breaks 
   const [error, setError] = useState(false);
 
-  // Function to fetch tours  from the API
   const fetchTours = async () => {
     try {
-      // The URL to get the tour data from the API (using a  proxy to avoid issues with permissions)
-      const res = await fetch("https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project");
-      const data = await res.json(); // data is already in array 
-      setTours(data); // save dirrectly to state  
-          setLoading(false);
-        } catch (err) {
-          setError(true);
-          setLoading(false);
-        }
-      };
-      
+      setLoading(true);  // loading screen
+      const response = await fetch(url); 
 
-  // Run fetchBooks once after component mounts
+      //If the response is not successful and error message will show 
+      if (!response.ok) {
+        throw new Error("ERROR: Was not able to fetch tours");
+      }
+
+      //Convert the response to json
+      const data = await response.json();
+      setTours(data);
+    } catch (error) {
+      console.log('Fetch error:', error);
+
+      // ERROR MESSAGE AGAIN 
+      setError(true);
+    } finally {
+      // Loading screen will go away 
+      setLoading(false);
+    }
+  };
+
+  // Fetchtour  function will be run once when the everythign is first loaded
   useEffect(() => {
     fetchTours();
   }, []);
 
-  // Render loading state
+ // render loading state 
   if (loading) {
     return <h2>Loading...</h2>;
   }
 
-  // Render error state
+  // render error state 
   if (error) {
-    return <h2>Error: Something went wrong...</h2>;
+    return <h2>Something went wrong.</h2>;
   }
-
-  // Render if no books are found/remain
+ 
   if (tours.length === 0) {
     return (
-      <>
-        <h2>No More Tours  Left. Try again later.</h2>
-        <button onClick={fetchTours}>Refresh</button>
-      </>
+      <div className="no-tours">
+        <h2>No tours left</h2>
+        <button onClick={fetchTours}>
+          Refresh
+        </button>
+      </div>
     );
   }
 
-  // Render the list of book cards
+  // Render the list of tour cards 
   return (
     <section className="gallery">
       {tours.map((tour) => (
@@ -57,4 +74,5 @@ const Gallery = ({ tours, setTours, onRemove }) => {
   );
 };
 
+//Exporting the compenent 
 export default Gallery;
