@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import TourCard from './TourCard';
 
-//retriving the API from the url * NOTE to self 
-// ; url breaks come back to this, used an  proxy to avoid issues with permissions)
+//retriving the API from the url 
+// * NOTE to self if the  url breaks come back to this,(currently: used an  proxy to avoid issues with permissions)
 const url = 'https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project';
 
 const Gallery = ({ tours, setTours, onRemove }) => { // fetched  and displayed all tours
