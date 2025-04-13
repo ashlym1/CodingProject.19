@@ -1,35 +1,28 @@
 import React, { useEffect, useState } from "react";
 import BookCard from "./TourCard";
 
-// BookList is responsible for fetching books and rendering the list
-const BookList = ({ books, setBooks, onRemove }) => {
+// Gallery fetched and renders all the tours 
+const Gallery = ({ tours, setTours, onRemove }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  // Function to fetch books from the API
-  const fetchBooks = async () => {
+  // Function to fetch tours  from the API
+  const fetchTours = async () => {
     try {
       const res = await fetch("https://course-api.com/react-tours-project");
-      const data = await res.json();
-
-      const trimmed = data.results.map((book) => ({
-        id: book.id,
-        name: book.name,
-        author: book.authors[0]?.name || "Unknown",
-      info : `Download count: ${book.download_count}. Subjects: ${book.subjects?.slice(0, 3).join(", ")}`,
-      }));
-
-      setBooks(trimmed);
-      setLoading(false);
-    } catch (error) {
-      setError(true);
-      setLoading(false);
-    }
-  };
+      const data = await res.json(); // data is array of tours 
+      setTours(data); // save dirrectly to state  
+          setLoading(false);
+        } catch (err) {
+          setError(true);
+          setLoading(false);
+        }
+      };
+      
 
   // Run fetchBooks once after component mounts
   useEffect(() => {
-    fetchBooks();
+    fetchTours();
   }, []);
 
   // Render loading state
@@ -43,10 +36,10 @@ const BookList = ({ books, setBooks, onRemove }) => {
   }
 
   // Render if no books are found/remain
-  if (books.length === 0) {
+  if (tours.length === 0) {
     return (
       <>
-        <h2>No Books Left. Try again later.</h2>
+        <h2>No More Tours  Left. Try again later.</h2>
         <button onClick={fetchBooks}>Refresh</button>
       </>
     );
@@ -54,16 +47,12 @@ const BookList = ({ books, setBooks, onRemove }) => {
 
   // Render the list of book cards
   return (
-    <section className="book-list">
-      {books.map((book) => (
-        <BookCard
-          key={book.id}
-          {...book}
-          onRemove={onRemove}
-        />
+    <section className="gallery">
+      {tours.map((tour) => (
+        <TourCard key={tour.id} {...tour} onRemove={onRemove} />
       ))}
     </section>
   );
 };
 
-export default BookList;
+export default Gallery;
