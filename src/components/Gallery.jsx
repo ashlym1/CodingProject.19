@@ -10,7 +10,7 @@ const Gallery = ({ tours, setTours, onRemove }) => {
   const fetchTours = async () => {
     try {
       const res = await fetch("https://course-api.com/react-tours-project");
-      const data = await res.json(); // data is array of tours 
+      const data = await res.json(); // data is already in array 
       setTours(data); // save dirrectly to state  
           setLoading(false);
         } catch (err) {
